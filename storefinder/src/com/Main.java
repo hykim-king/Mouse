@@ -42,16 +42,16 @@ public class Main {
 	public static ArrayList<String> menuSubSet() {
 		ArrayList<String> getMenuSubTitle=new ArrayList<>();
 	
-		getMenuSubTitle.add("1. 전체 검색");
-		getMenuSubTitle.add("2. 드라이브스루 검색");
-		getMenuSubTitle.add("3. 메인화면으로 이동");
+		getMenuSubTitle.add("8. 전체 검색");
+		getMenuSubTitle.add("9. 드라이브스루 검색");
+		getMenuSubTitle.add("0. 메인화면으로 이동");
 	
 		return getMenuSubTitle;
 	}
 	
 	
 	
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException{
 
         Gson gson = new Gson();
         Distance distance = new Distance();
@@ -67,6 +67,7 @@ public class Main {
         //회원정보 Dao
         MembeDao membeDao = new MembeDao();
 
+
         do {
           	ArrayList<String> menuTitle1 = menuSet(loginSession);
         	
@@ -80,90 +81,126 @@ public class Main {
 			menuSelect = scanner.nextLine();
 			
 			if("1".equals(menuSelect)) {	//1. 근처 매장 찾기
-				System.out.println();
-				System.out.print("주소를 입력하세요>");
-				String address = scanner.nextLine();
-				ArrayList<String> menuSubTitle1 = menuSubSet();
-				System.out.println();
-				System.out.println(menuSubTitle1);
-//		        String address = "서교동 354-8";
-//		        String address = "서울 마포구 양화로 122";
-		        if(address=="") {
-		        	System.out.println("=================================");
-		        	System.out.println("=== 검색하신 주소는 없는 주소입니다. ====");
-		        	System.out.println("=================================");
-		        }else {
-		        	System.out.println();
-					System.out.println("■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■");
-					System.out.println("▶ [예)5 Enter => 5Km 방경 검색]  ◀");
-					System.out.println("■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■");
+				
+				do {
+					ArrayList<String> menuSubTitle1 = menuSubSet();
+					System.out.println("──────────────────────────────────────────────────────");
+					for(String mts : menuSubTitle1) {
+						System.out.println(mts.intern());
+					}
+					System.out.println("──────────────────────────────────────────────────────");
 					
-					System.out.print("반경 거리(Km)를 입력하세요 >");
-					String killoText = scanner.nextLine();
-					int killo = 5;
-					if(killoText.equals("")) {
-						System.out.println("입력내용이 없습니다. 5Km로 기본 설정 됩니다.");
-					}else {
-						killo = Integer.parseInt(killoText);
+					System.out.printf("검색하실 메뉴를 선택해 주세요>");
+					menuSelect = scanner.nextLine();
+					
+
+					System.out.println();
+					String storeType = "";
+					if("8".equals(menuSelect)) {	//8. 전체 검색
+						storeType = "general";
+					}else if("9".equals(menuSelect)) { //9. 드라이브 스루
+						storeType = "generalDT";
+					}else if("0".equals(menuSelect)) { //0. 메인메뉴로 이동
+						break;
 					}
 					
-			        MyPoint myPoint = new MyPoint();
-			        List<ResultVO> resultPoint = myPoint.getCoordinatesFromAddress(address,"parcel");
-	//		        
-			        if(resultPoint.get(0).getStatus().equals("NOT_FOUND")) {
-		            	List<ResultVO> resultPoint1 = myPoint.getCoordinatesFromAddress(address,"ROAD");
-		            	resultPoint = resultPoint1;
-		            }
-			        if(resultPoint.get(0).getStatus().equals("NOT_FOUND")) {
+					System.out.println();
+					System.out.print("주소를 입력하세요>");
+					String address = scanner.nextLine();
+
+//			        String address = "서교동 354-8";
+//			        String address = "서울 마포구 양화로 122";
+			        if(address=="") {
 			        	System.out.println("=================================");
 			        	System.out.println("=== 검색하신 주소는 없는 주소입니다. ====");
 			        	System.out.println("=================================");
 			        }else {
-				        double Mylon = Double.parseDouble(resultPoint.get(0).getGetX());
-			            double Mylat = Double.parseDouble(resultPoint.get(0).getGetY());
-			            
-//			            StoreSearch storeSearch = new StoreSearch(Mylon, Mylat);
-//			            System.out.println(storeSearch.toString());
-				        // JSON 파일 읽기
-				        String jsonString = new String(Files.readAllBytes(Paths.get("starbucks.json")), StandardCharsets.UTF_8);
-				        Store[] stores = gson.fromJson(jsonString, Store[].class);
-		
-				        // 리스트로 변환해서 거리정보 추가
-				        List<StoreDistance> storeList = new ArrayList<>();
-		
-				        for (Store store : stores) {
-				            double storeLat = Double.parseDouble(store.latitude);
-				            double storeLon = Double.parseDouble(store.longitude);
-				            double dist = distance.calculateDistance(storeLat, storeLon, Mylat, Mylon);
-				            
-				            storeList.add(new StoreDistance(store, dist));
-				        }
-		
-				        // 거리 오름차순 정렬
-				        storeList.sort(Comparator.comparingDouble(StoreDistance::getDistance));
-				       
-				        // 상위 10개만 예시 출력
-				        int j=0;
-				        StringBuilder sb = new StringBuilder();
-				        System.out.println("===== 가까운 매장 TOP 30 Start =====");
-				        for (int i = 0; i < Math.min(100, storeList.size()); i++) {
-				        	StoreDistance sd = storeList.get(i);
-				        	if(sd.getDistance() < killo && i < 30) {
-				        		sb.append((i + 1) + ". " +sd.getStore().name + " " + String.format("%.2f", sd.getDistance())+" km \n");
-				        		j++;
-				        	}
-				        }
-				        	
-				        if(j < 1) {
-					        System.out.println("#### 검색하신 매장이 근처에 없습니다. ####");
+			        	System.out.println();
+						System.out.println("■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■");
+						System.out.println("▶ [예)5 Enter => 5Km 방경 검색]  ◀");
+						System.out.println("■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■");
+						
+						System.out.print("반경 거리(Km)를 입력하세요 >");
+						String killoText = scanner.nextLine();
+						int killo = 5;
+						if(killoText.equals("")) {
+							System.out.println("입력내용이 없습니다. 5Km로 기본 설정 됩니다.");
+						}else {
+							killo = Integer.parseInt(killoText);
+						}
+						
+				        MyPoint myPoint = new MyPoint();
+				        List<ResultVO> resultPoint = myPoint.getCoordinatesFromAddress(address,"parcel");
+		//		        
+				        if(resultPoint.get(0).getStatus().equals("NOT_FOUND")) {
+			            	List<ResultVO> resultPoint1 = myPoint.getCoordinatesFromAddress(address,"ROAD");
+			            	resultPoint = resultPoint1;
+			            }
+				        if(resultPoint.get(0).getStatus().equals("NOT_FOUND")) {
+				        	System.out.println("=================================");
+				        	System.out.println("=== 검색하신 주소는 없는 주소입니다. ====");
+				        	System.out.println("=================================");
 				        }else {
-				        	readStoreTmp = sb.toString();
-				        	System.out.println(sb.toString());
+					        double Mylon = Double.parseDouble(resultPoint.get(0).getGetX());
+				            double Mylat = Double.parseDouble(resultPoint.get(0).getGetY());
+				            
+//				            StoreSearch storeSearch = new StoreSearch(Mylon, Mylat);
+//				            System.out.println(storeSearch.toString());
+					        // JSON 파일 읽기
+					        String jsonString = new String(Files.readAllBytes(Paths.get("starbucks.json")), StandardCharsets.UTF_8);
+					        Store[] stores = gson.fromJson(jsonString, Store[].class);
+			
+					        // 리스트로 변환해서 거리정보 추가
+					        List<StoreDistance> storeList = new ArrayList<>();
+			
+					        for (Store store : stores) {
+					            double storeLat = Double.parseDouble(store.latitude);
+					            double storeLon = Double.parseDouble(store.longitude);
+					            double dist = distance.calculateDistance(storeLat, storeLon, Mylat, Mylon);
+					            
+					            
+					            storeList.add(new StoreDistance(store, dist, store.type ));
+					        }
+			
+					        // 거리 오름차순 정렬
+					        storeList.sort(Comparator.comparingDouble(StoreDistance::getDistance));
+					       
+					        // 상위 10개만 예시 출력
+					        int j=0;
+					        StringBuilder sb = new StringBuilder();
+					        System.out.println("===== 가까운 매장 TOP 30 Start =====");
+					        for (int i = 0; i < Math.min(100, storeList.size()); i++) {
+					        	StoreDistance sd = storeList.get(i);
+					        	if(storeType=="generalDT") {
+//					        		if(sd.getType() == "generalDT" && sd.getDistance() < killo ) {
+					        		if(sd.getType().equals(storeType) && sd.getDistance() < killo && j < 30) {
+					        			
+						        		sb.append((j + 1) + ". " +sd.getStore().name + " " + String.format("%.2f", sd.getDistance())+" km \n");
+						        		j++;
+						        	}
+					        	}else {
+					        		if(sd.getDistance() < killo  && i < 30) {
+						        		sb.append((i + 1) + ". " +sd.getStore().name + " " + String.format("%.2f", sd.getDistance())+" km \n");
+						        		j++;
+						        	}
+					        	}
+					        }
+					        System.out.println(j);
+					        	
+					        if(j < 1) {
+						        System.out.println("#### 검색하신 매장이 근처에 없습니다. ####");
+					        }else {
+					        	readStoreTmp = sb.toString();
+					        	System.out.println(sb.toString());
+					        }
+					        System.out.println("==== 가까운 매장 TOP 30 End ====");
+					        
 				        }
-				        System.out.println("==== 가까운 매장 TOP 30 End ====");
-				        
 			        }
-		        }
+				}while(true);
+				
+				
+				
 				
 			}else if("4".equals(menuSelect)) {	//4. 이전 내역 조회
 				if(readStoreTmp != "") {
