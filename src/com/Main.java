@@ -24,7 +24,7 @@ public class Main {
 		ArrayList<String> getMenuTitle=new ArrayList<>();
 		
 		if(loginSession == false) {
-			getMenuTitle.add("1. 가까운 매장찾기 ");
+			getMenuTitle.add("1. 가까운 매장찾기");
 			getMenuTitle.add("2. 로그인");
 			getMenuTitle.add("3. 회원가입");
 			getMenuTitle.add("q. 종료하기");
