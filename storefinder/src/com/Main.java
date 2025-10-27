@@ -168,7 +168,7 @@ public class Main {
 					        // 상위 10개만 예시 출력
 					        int j=0;
 					        StringBuilder sb = new StringBuilder();
-					        System.out.println("===== 가까운 매장 TOP 30 Start =====");
+					        
 					        for (int i = 0; i < Math.min(100, storeList.size()); i++) {
 					        	StoreDistance sd = storeList.get(i);
 					        	if(storeType=="generalDT") {
@@ -185,15 +185,16 @@ public class Main {
 						        	}
 					        	}
 					        }
-					        System.out.println(j);
-					        	
+					        
+					        System.out.printf("===== 가까운 매장 TOP %s Start =====%n",j);
 					        if(j < 1) {
-						        System.out.println("#### 검색하신 매장이 근처에 없습니다. ####");
+						        System.out.printf("#### 검색하신 매장이 근처에 없습니다. ####");
 					        }else {
+					        	
 					        	readStoreTmp = sb.toString();
 					        	System.out.println(sb.toString());
 					        }
-					        System.out.println("==== 가까운 매장 TOP 30 End ====");
+					        System.out.printf("==== 가까운 매장 TOP %s End ====%n",j);
 					        
 				        }
 			        }
