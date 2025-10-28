@@ -19,35 +19,32 @@ import com.google.gson.JsonParser;
 
 public class Main {
 	//메뉴설정
-	public static ArrayList<String> menuSet(boolean loginSession) {
+	public static ArrayList<String> menuSet(boolean loginSession, String menuType) {
 		ArrayList<String> getMenuTitle=new ArrayList<>();
+		if(menuType.equals("1")) {
+			if(loginSession == false) {
+				getMenuTitle.add("1. 가까운 매장찾기");
+				getMenuTitle.add("2. 로그인");
+				getMenuTitle.add("3. 회원가입");
+				getMenuTitle.add("q. 종료하기");
+//				getMenuTitle.add("order. 주문하기(점검중)");
+	        }else{
+	        	getMenuTitle.add("1. 가까운 매장찾기");
+	        	getMenuTitle.add("4. 이전 내역보기");
+	        	getMenuTitle.add("5. 회원정보 수정");
+	        	getMenuTitle.add("6. 회웥탈퇴");
+	        	getMenuTitle.add("7. 로그아웃");
+	        	getMenuTitle.add("q. 종료하기");
+	        }
+		}else if (menuType.equals("2")){
+			getMenuTitle.add("8. 전체 검색");
+			getMenuTitle.add("9. 드라이브스루 검색");
+			getMenuTitle.add("0. 메인화면으로 이동");
+		}
 		
-		if(loginSession == false) {
-			getMenuTitle.add("1. 가까운 매장찾기");
-			getMenuTitle.add("2. 로그인");
-			getMenuTitle.add("3. 회원가입");
-			getMenuTitle.add("q. 종료하기");
-			getMenuTitle.add("order. 주문하기(점검중)");
-        }else{
-        	getMenuTitle.add("1. 가까운 매장찾기");
-        	getMenuTitle.add("4. 이전 내역보기");
-        	getMenuTitle.add("5. 회원정보 수정");
-        	getMenuTitle.add("6. 회웥탈퇴");
-        	getMenuTitle.add("7. 로그아웃");
-        	getMenuTitle.add("q. 종료하기");
-        }
 		return getMenuTitle;
 	}
 	
-	public static ArrayList<String> menuSubSet() {
-		ArrayList<String> getMenuSubTitle=new ArrayList<>();
-	
-		getMenuSubTitle.add("8. 전체 검색");
-		getMenuSubTitle.add("9. 드라이브스루 검색");
-		getMenuSubTitle.add("0. 메인화면으로 이동");
-	
-		return getMenuSubTitle;
-	}
 	
 	
 	
@@ -67,9 +64,8 @@ public class Main {
         //회원정보 Dao
         MembeDao membeDao = new MembeDao();
 
-
         do {
-          	ArrayList<String> menuTitle1 = menuSet(loginSession);
+          	ArrayList<String> menuTitle1 = menuSet(loginSession, "1");
         	
 			System.out.println("──────────────────────────────────────────────────────");
 			for(String mt : menuTitle1) {
@@ -83,10 +79,10 @@ public class Main {
 			if("1".equals(menuSelect)) {	//1. 근처 매장 찾기
 				
 				do {
-					ArrayList<String> menuSubTitle1 = menuSubSet();
+					menuTitle1 = menuSet(loginSession, "2");
 					System.out.println("──────────────────────────────────────────────────────");
-					for(String mts : menuSubTitle1) {
-						System.out.println(mts.intern());
+					for(String mt : menuTitle1) {
+						System.out.println(mt.intern());
 					}
 					System.out.println("──────────────────────────────────────────────────────");
 					
@@ -168,7 +164,7 @@ public class Main {
 					        // 상위 10개만 예시 출력
 					        int j=0;
 					        StringBuilder sb = new StringBuilder();
-					        
+					        System.out.println("===== 가까운 매장 TOP 30 Start =====");
 					        for (int i = 0; i < Math.min(100, storeList.size()); i++) {
 					        	StoreDistance sd = storeList.get(i);
 					        	if(storeType=="generalDT") {
@@ -185,16 +181,15 @@ public class Main {
 						        	}
 					        	}
 					        }
-					        
-					        System.out.printf("===== 가까운 매장 TOP %s Start =====%n",j);
-					        if(j < 1) {
-						        System.out.printf("#### 검색하신 매장이 근처에 없습니다. ####");
-					        }else {
+					        System.out.println(j);
 					        	
+					        if(j < 1) {
+						        System.out.println("#### 검색하신 매장이 근처에 없습니다. ####");
+					        }else {
 					        	readStoreTmp = sb.toString();
 					        	System.out.println(sb.toString());
 					        }
-					        System.out.printf("==== 가까운 매장 TOP %s End ====%n",j);
+					        System.out.println("==== 가까운 매장 TOP 30 End ====");
 					        
 				        }
 			        }
