@@ -26,6 +26,8 @@ public class Menu {
 		dao = new MemberDao();
 		if(menuType.equals("1")) {
 			if(loginSession == false) {
+				getMenuTitle.add("│  Store Finder	 	│");
+	        	getMenuTitle.add("├───────────────────────┤");
 				getMenuTitle.add("│  1. 가까운 매장찾기		│");
 				getMenuTitle.add("│  2. 로그인		│");
 				getMenuTitle.add("│  3. 회원가입		│");
@@ -33,6 +35,8 @@ public class Menu {
 				
 //				getMenuTitle.add("order. 주문하기(점검중)");
 	        }else{
+	        	getMenuTitle.add("│  Store Finder	 	│");
+	        	getMenuTitle.add("├───────────────────────┤");
 	        	getMenuTitle.add("   ▶ "+dao.MEMBER_LOGIN_ID );
 	        	getMenuTitle.add("├───────────────────────┤");
 	        	getMenuTitle.add("│  1. 가까운 매장찾기		│");
@@ -54,12 +58,8 @@ public class Menu {
 			sb.append(list+"\n");
 		}
 		sb.append("└───────────────────────┘\n");
-		
-		
-		
+			
 		return sb;
 	}
-	
-	
 }
 
