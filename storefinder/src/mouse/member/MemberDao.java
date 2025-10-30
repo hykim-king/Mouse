@@ -108,7 +108,7 @@ public class MemberDao implements WorkDiv<MemberVO> {
 				if(strArr.length == 6) {
 					MemberVO vo=new MemberVO(strArr[0], strArr[1], strArr[2], strArr[3], strArr[4], strArr[5]);
 					log.debug(vo);
-					members.add(vo);
+					//members.add(vo);
 					flag++;
 				}
 				
