@@ -1,8 +1,12 @@
 /**
  * 
  */
-package mouse;
+package mouse.cmn;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.util.List;
 import java.util.Scanner;
@@ -20,8 +24,8 @@ import mouse.storesearch.StoreSearch;
 public class StoreFinderView {
 	private MemberDao dao;
 	private Scanner scanner;
-	public static boolean loginSession = false; // 로그인 체크
-	public static String loginMemberId = ""; // 로그인 아이디
+	
+	
 	
 	public StoreFinderView(Scanner scanner) throws IOException {
 		super();
@@ -35,18 +39,18 @@ public class StoreFinderView {
         MyPoint myPoint = new MyPoint();
 		//menu
 		loop:while(true) {
-//			System.out.println(loginSession);
-			StringBuilder menu = menuStr.menuSet(loginSession, "1");
+//			
+			StringBuilder menu = menuStr.menuSet(dao.MEMBER_LOGIN_SESSION, "1");
 			System.out.println(menu);	
 			
 			System.out.print("메뉴를 입력 하세요.>");
 			String menuInput = scanner.nextLine().trim();
 			
-			
 			home:switch(menuInput) {
 				case "1"://매장 찾기
 					do {
-						StringBuilder menuSubTitle = menuStr.menuSet(loginSession, "2");
+						
+						StringBuilder menuSubTitle = menuStr.menuSet(dao.MEMBER_LOGIN_SESSION, "2");
 			        	System.out.println(menuSubTitle);
 						
 						System.out.printf("검색하실 메뉴를 선택해 주세요>");
@@ -119,25 +123,25 @@ public class StoreFinderView {
 					doSave();
 					break;
 				case"4": //이전 내역보기
-					
+					doUserHistory();
 					break;
 				case"5": //회원정보 수정
-					if(loginSession == true) {
+					if(dao.MEMBER_LOGIN_SESSION == true) {
 						doUpdate();
 					}else {
 						System.out.println("잘못된 접근입니다.");
 					}
 					break;					
 				case"6": //회원탈퇴
-					if(loginSession == true) {
+					if(dao.MEMBER_LOGIN_SESSION == true) {
 						doDelete();
 					}else {
 						System.out.println("잘못된 접근입니다.");
 					}
 					break;
 				case"7": //로그아웃
-					if(loginSession == true) {
-						loginSession = false;
+					if(dao.MEMBER_LOGIN_SESSION == true) {
+						dao.MEMBER_LOGIN_SESSION = false;
 					}else {
 						System.out.println("잘못된 접근입니다.");
 					}
@@ -162,57 +166,52 @@ public class StoreFinderView {
 					System.out.println("종료 되었습니다.\n이용해 주셔서 감사합니다.");
 					System.out.println(lastMogi);
 					break loop;
-				}
+			}
 			
-//			switch(menuInput) {
-//				case "2"://단건 조회
-//					doSelectOne();
-//					break;
-//				case "3"://단건 둥록
-//					doSave();
-//					break;
-//				case "4"://단건 수정
-//					doUpdate();
-//					break;					
-//					
-//				case "5"://단건 삭제
-//					doDelete();
-//					break;
-//					
-//				case "6"://종료
-//					System.out.println("┌───────────────────────┐");
-//					System.out.println("│종료                     │");
-//					System.out.println("└───────────────────────┘");		
-//					break loop;
-//			
-//			}
 		}
 	}
+	/**
+	 * 회원 이전 조회 내역
+	 */
+	public void doUserHistory() {
+		String line = "";
+		//회원이 조회시 이력 저장
+        if(dao.MEMBER_LOGIN_ID != "") {
+        	String userFilePath = ".\\storefinder\\data\\"+dao.MEMBER_LOGIN_ID+"_history.txt";
+        	File file = new File(userFilePath);
+    		if(file.exists()==true) {
+				try (BufferedReader bufferedReader = new BufferedReader(new FileReader(userFilePath))) {
+					line = "";
+					
+					while((line = bufferedReader.readLine())!=null) {
+						System.out.println(line);
+					}
+					System.out.println(line);
+				} catch (FileNotFoundException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}else {
+				System.out.printf("┌────────────────────────┐\n");
+				System.out.printf("│이전 이력이 없습니다.           │\n");
+				System.out.printf("└────────────────────────┘\n");
+			}
+        }
+        
+        
+	}
+	
 	/**
 	 * 회원 수정
 	 */
 	public void doUpdate() {
 		MemberVO inVO=new MemberVO(); //Dao전달 Param
-		//회원ID입력
-		while(true) {
-			System.out.printf("회원ID를 입력 하세요.>");
-			String memberId = scanner.nextLine().trim();
-			
-			if(memberId.isEmpty() || memberId.isBlank()) {
-				System.out.println("※[입력] 회원ID를 입력 하세요.>\n");
-				continue;
-			}
-			
-			inVO.setMemberId(memberId);
-			
-			//회원존재 여부 확인 : 회원이 없으면
-			if(dao.isExistsMember(inVO)==false) {
-				System.out.println("※[입력] 회원ID를 확인 하세요.>\n");
-				continue;
-			}
-			
-			break;
-		}
+		//회원ID 자동 입력
+		
+		inVO.setMemberId(dao.MEMBER_LOGIN_ID);
 		
 		// 이름
 		while(true) {
@@ -298,28 +297,47 @@ public class StoreFinderView {
 	 */
 	public void doDelete() {
 		MemberVO inVO=new MemberVO(); //Dao전달 Param
-		
-		
-		
-		int flag = dao.doDelete(inVO);
-		
-		if(1==flag) {//삭제 성공
-			System.out.printf("┌────────────────────────┐\n");
-			System.out.printf("│[삭제:성공] 삭제 회원:%s       │\n",inVO.getMemberId());
-			System.out.printf("└────────────────────────┘\n");
+		String memberId;
+		//회원ID입력
+		while(true) {
+			System.out.printf("정말 회원탈퇴 하시겠습니까?\n탈퇴를 원하시면 로그인시 아이디를 입력하세요.>");
+			memberId = scanner.nextLine().trim();
 			
-			//파일 저장
-			dao.writeFile(dao.MEMBER_DATA);
-			
-		}else if(2==flag) {//회원ID 없음
-			System.out.printf("┌────────────────────────┐\n");
-			System.out.printf("│[X] (%s)회원이 존재하지 않습니다  │\n",inVO.getMemberId());
-			System.out.printf("└────────────────────────┘\n");
-		}else if(0==flag) {
-			System.out.printf("┌────────────────────────┐\n");
-			System.out.printf("│[삭제:실패] 회원 정보:%s       │\n",inVO.getMemberId());
-			System.out.printf("└────────────────────────┘\n");
+			if(memberId.isEmpty() || memberId.isBlank()) {
+				System.out.println("※[입력] 회원ID를 입력 하세요.>\n");
+				continue;
+			}
+		
+			break;
 		}
+		
+		if(dao.MEMBER_LOGIN_ID.equalsIgnoreCase(memberId)) {
+			inVO.setMemberId(memberId);
+			int flag = dao.doDelete(inVO);
+			
+			if(1==flag) {//삭제 성공
+				System.out.printf("┌────────────────────────┐\n");
+				System.out.printf("│[탈퇴:성공] 탈퇴 회원:%s       │\n",inVO.getMemberId());
+				System.out.printf("└────────────────────────┘\n");
+				
+				//파일 저장
+				dao.MEMBER_LOGIN_SESSION=false;
+				dao.writeFile(dao.MEMBER_DATA);
+				
+			}else if(2==flag) {//회원ID 없음
+				System.out.printf("┌────────────────────────┐\n");
+				System.out.printf("│[탈퇴:실패] (%s)회원이 존재하지 않습니다  │\n",inVO.getMemberId());
+				System.out.printf("└────────────────────────┘\n");
+			}else if(0==flag) {
+				System.out.printf("┌────────────────────────┐\n");
+				System.out.printf("│[탈퇴:실패] 회원 정보:%s       │\n",inVO.getMemberId());
+				System.out.printf("└────────────────────────┘\n");
+			}
+		}else {
+			System.out.println("※[입력] 회원아이디가 일치 하지 않습니다.>\n");
+		}
+		
+		
 	}
 	/**
 	 * 회원 가입
@@ -427,12 +445,12 @@ public class StoreFinderView {
 	public void doLogin() {
 
 		MemberVO inVO=new MemberVO();
-		
+		String memberId = "";
 		//회원ID입력
 		while(true) {
 			
 			System.out.printf("회원ID를 입력 하세요.>");
-			String memberId = scanner.nextLine().trim();
+			memberId = scanner.nextLine().trim();
 			
 			if(memberId.isEmpty() || memberId.isBlank()) {
 				System.out.println("※[입력] 회원ID를 입력 하세요.>\n");
@@ -455,7 +473,7 @@ public class StoreFinderView {
 			break;
 		}
 
-		MemberVO outVO = dao.doSelectOne(inVO);
+		MemberVO outVO = dao.doLogin(inVO);
 		
 		
 		if(null == outVO) {
@@ -468,7 +486,9 @@ public class StoreFinderView {
 			System.out.printf(" [%s]님 로그인 하셨습니다.       \n",inVO.getMemberId());
 			System.out.printf("└────────────────────────┘\n");
 //			System.out.printf("->%s%n",outVO.voToTable());
-			loginSession = true;
+			
+			dao.MEMBER_LOGIN_SESSION=true;
+			dao.MEMBER_LOGIN_ID = memberId;
 		}
 	}
 	

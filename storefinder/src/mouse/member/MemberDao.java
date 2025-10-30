@@ -32,7 +32,8 @@ public class MemberDao implements WorkDiv<MemberVO> {
 	
 	static final List<MemberVO> members = new ArrayList<MemberVO>();
 	
-	
+	public static String MEMBER_LOGIN_ID = ""; //회원 아이디
+	public static boolean MEMBER_LOGIN_SESSION = false; //회원 로그인 섹션
 
 	//생성자
 	//등록
@@ -225,7 +226,7 @@ public class MemberDao implements WorkDiv<MemberVO> {
 		MemberVO outVO = null;
 		MemberVO inVO = param;
 		for (MemberVO vo:members) {
-			if(vo.getMemberId().equals(inVO.getMemberId()) || vo.getPassword().equals(inVO.getPassword())) {
+			if(vo.getMemberId().equals(inVO.getMemberId()) && vo.getPassword().equals(inVO.getPassword())) {
 				outVO = vo;
 				break;
 			}
