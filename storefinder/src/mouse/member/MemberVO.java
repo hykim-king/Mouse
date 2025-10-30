@@ -5,12 +5,12 @@ package mouse.member;
 
 import java.util.Objects;
 
-import mouse.cmn.DTO;
+
 
 /**
  * 회원정보 Value Object 
  */
-public class MemberVO extends DTO {
+public class MemberVO {
 	private String memberId;	// 회원  ID
 	private String name;		// 이름
 	private String password;	// 비밀번호

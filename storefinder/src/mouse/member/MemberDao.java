@@ -201,7 +201,7 @@ public class MemberDao implements WorkDiv<MemberVO> {
 	/**
 	 * 단건조회
 	 * @param param
-	 * @return 실패:null/성공: DTO
+	 * @return 실패:null/성공: 
 	 */
 	@Override
 	public MemberVO doSelectOne(MemberVO param) {
@@ -219,7 +219,7 @@ public class MemberDao implements WorkDiv<MemberVO> {
 	/**
 	 * 로그인
 	 * @param param
-	 * @return 실패:null/성공: DTO
+	 * @return 실패:null/성공: 
 	 */
 	@Override
 	public MemberVO doLogin(MemberVO param) {

@@ -7,7 +7,7 @@ package mouse.cmn;
  * 목록 검색용 VO
  * 
  */
-public class SearchVO extends DTO{
+public class SearchVO{
 	private String searchDiv; 	//검색구분
 	private String searchWord;	//검색어
 	

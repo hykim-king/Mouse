@@ -5,7 +5,6 @@ package mouse;
 
 import java.io.IOException;
 import java.util.Scanner;
-
 import mouse.cmn.StoreFinderView;
 
 
@@ -20,7 +19,6 @@ public class MainTest {
 	
 	public static void main(String[] args) throws IOException {
 		MainTest maintest = new MainTest();
-		
 	}
 
 }

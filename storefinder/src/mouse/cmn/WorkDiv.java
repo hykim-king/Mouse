@@ -37,7 +37,7 @@ public interface WorkDiv<E> {
 	/**
 	 * 단건조회
 	 * @param param
-	 * @return 실패:null/성공: DTO
+	 * @return 실패:null/성공: 
 	 */
 	E doSelectOne(E param);
 
@@ -51,7 +51,7 @@ public interface WorkDiv<E> {
 	/**
 	 * 로그인
 	 * @param param
-	 * @return 실패:null/성공: DTO
+	 * @return 실패:null/성공: 
 	 */
 	E doLogin(E param);
 
