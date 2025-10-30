@@ -1,39 +1,22 @@
 /**
  * 
  */
-package com;
+package mouse.storesearch;
 
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.Reader;
-import java.lang.reflect.Array;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.*;
-
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 public class StoreSearch {
 //	static double Mylon=0;
 //	static double Mylat=0;
 	
-	
-	public static void main(String[] args) {
-		//서울 마포구 양화로 122
-		//Latitude : 37.5540720468966
-		//Longitude : 126.920603903509
-		// 김포시청 위도(Latitude) : 37.6153488 / 경도(Longitude) : 126.715451
-		double mylon = 126.715451;
-		double mylat = 37.6153488;
-		String storeType = "generalDT";
-		StoreSearch(mylon, mylat, storeType, 1000);
-	}
-	
+
 	public static void StoreSearch(double mylon, double mylat, String storeType, int killo) {
 		
 		Gson gson = new Gson();

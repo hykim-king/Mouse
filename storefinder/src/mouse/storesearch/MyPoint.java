@@ -1,4 +1,4 @@
-package com;
+package mouse.storesearch;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;

@@ -5,7 +5,7 @@
  * 작성일: 2025-10-22
  * 버전 : 1.0
  */
-package com;
+package mouse.storesearch;
 
 /**
  * 

@@ -1,7 +1,7 @@
 /**
  * 
  */
-package common;
+package mouse.cmn;
 
 import java.util.ArrayList;
 

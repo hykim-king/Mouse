@@ -1,4 +1,4 @@
-package com;
+package mouse.storesearch;
 
 import com.google.gson.annotations.SerializedName;
 

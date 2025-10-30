@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com;
+package mouse.storesearch;
 
 
 public class Point {

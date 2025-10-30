@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com;
+package mouse.storesearch;
 
 //거리 포함한 새 클래스
 public class StoreDistance {
