@@ -50,6 +50,17 @@ public class MemberVO extends DTO {
 		
 	}
 	
+	public String voToCsvLog() {
+		return String.format("%s,%s,%s,%s,%s,%s", memberId
+										   , name
+										   , password
+										   , email
+										   , regDt
+										   , role
+										   );
+		
+	}
+	
 	public String voToTable() {
 		return String.format("%-10s,%-7s,%-10s,%-20s,%10s,%-10s%n", memberId
 										   , name

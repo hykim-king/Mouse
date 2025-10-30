@@ -19,7 +19,6 @@ import org.apache.logging.log4j.Logger;
 import com.google.gson.Gson;
 
 import mouse.member.MemberDao;
-import mouse.member.MemberVO;
 public class StoreSearch {
 //	static double Mylon=0;
 //	static double Mylat=0;

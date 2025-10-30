@@ -11,8 +11,6 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Scanner;
 
-import mouse.cmn.DateUtil;
-import mouse.cmn.Menu;
 import mouse.member.MemberDao;
 import mouse.member.MemberVO;
 import mouse.storesearch.MyPoint;
@@ -49,7 +47,7 @@ public class StoreFinderView {
 			home:switch(menuInput) {
 				case "1"://매장 찾기
 					do {
-						
+						String storeType = "";
 						StringBuilder menuSubTitle = menuStr.menuSet(dao.MEMBER_LOGIN_SESSION, "2");
 			        	System.out.println(menuSubTitle);
 						
@@ -58,18 +56,28 @@ public class StoreFinderView {
 						
 						System.out.println();
 						
-						// 검색 종류 설정
-						String storeType = "";
-						subMenu:switch(menuInput) {
-							case "8":
-								storeType = "general";
-								break;
-							case "9":
-								storeType = "generalDT";
-								break;
-							case "0":
-								
-								break home;
+						if(menuInput.isEmpty() || menuInput.isBlank()) {
+							System.out.println("※[입력] 잘못된 입력 입니다. 다시 입력 하세요.>\n");
+							continue;
+						}
+						
+						if(menuInput.equals("8") ||menuInput.equals("9") || menuInput.equals("0") ) {
+							// 검색 종류 설정
+							
+							subMenu:switch(menuInput) {
+								case "8":
+									storeType = "general";
+									break;
+								case "9":
+									storeType = "generalDT";
+									break;
+								case "0":
+									
+									break home;
+							}
+						}else {
+							System.out.println("잘못된 입력 입니다. 다시 입력해주세요.");
+							continue;
 						}
 						
 						
@@ -79,9 +87,9 @@ public class StoreFinderView {
 
 						
 				        if(address=="") {
-				        	System.out.println("=================================");
-				        	System.out.println("=== 검색하신 주소는 없는 주소입니다. ====");
-				        	System.out.println("=================================");
+				        	System.out.println("■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■");
+				        	System.out.println("▶  잘못된 입력 입니다. 다시 입력해주세요. ◀");
+				        	System.out.println("■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■");
 				        }else {
 				        	System.out.println();
 							System.out.println("■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■");
@@ -92,7 +100,10 @@ public class StoreFinderView {
 							String killoText = scanner.nextLine();
 							int killo = 5;
 							if(killoText.equals("")) {
-								System.out.println("입력내용이 없습니다. 5Km로 기본 설정 됩니다.");
+								System.out.println("■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■");
+								System.out.println("▶ 입력내용이 없습니다. 5Km로 기본 설정 됩니다.  ◀");
+								System.out.println("■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■");
+								System.out.println("");
 							}else {
 								killo = Integer.parseInt(killoText);
 							}
@@ -105,9 +116,9 @@ public class StoreFinderView {
 				            	resultPoint = resultPoint1;
 				            }
 					        if(resultPoint.get(0).getStatus().equals("NOT_FOUND")) {
-					        	System.out.println("┌───────────────────────┐");
-					        	System.out.println("│  검색하신 주소는 없는 주소입니다  │");
-					        	System.out.println("└───────────────────────┘");
+					        	System.out.println("■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■");
+					        	System.out.println("▶    검색하신 주소는 없는 주소입니다.    ◀");
+					        	System.out.println("■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■");
 					        }else {
 						        double Mylon = Double.parseDouble(resultPoint.get(0).getGetX());
 					            double Mylat = Double.parseDouble(resultPoint.get(0).getGetY());
@@ -123,27 +134,41 @@ public class StoreFinderView {
 					doSave();
 					break;
 				case"4": //이전 내역보기
-					doUserHistory();
+					if(dao.MEMBER_LOGIN_SESSION == true) {
+						doUserHistory();
+					}else {
+						System.out.println("■■■■■■■■■■■■■■■■■■");
+						System.out.println("▶  잘못된 접근입니다.  ◀");
+						System.out.println("■■■■■■■■■■■■■■■■■■");
+					}
+					
 					break;
 				case"5": //회원정보 수정
 					if(dao.MEMBER_LOGIN_SESSION == true) {
 						doUpdate();
 					}else {
-						System.out.println("잘못된 접근입니다.");
+						System.out.println("■■■■■■■■■■■■■■■■■■");
+						System.out.println("▶  잘못된 접근입니다.  ◀");
+						System.out.println("■■■■■■■■■■■■■■■■■■");
 					}
 					break;					
 				case"6": //회원탈퇴
 					if(dao.MEMBER_LOGIN_SESSION == true) {
 						doDelete();
 					}else {
-						System.out.println("잘못된 접근입니다.");
+						System.out.println("■■■■■■■■■■■■■■■■■■");
+						System.out.println("▶  잘못된 접근입니다.  ◀");
+						System.out.println("■■■■■■■■■■■■■■■■■■");
 					}
 					break;
 				case"7": //로그아웃
 					if(dao.MEMBER_LOGIN_SESSION == true) {
 						dao.MEMBER_LOGIN_SESSION = false;
 					}else {
-						System.out.println("잘못된 접근입니다.");
+						System.out.println("■■■■■■■■■■■■■■■■■■");
+						System.out.println("▶  잘못된 접근입니다.  ◀");
+						System.out.println("■■■■■■■■■■■■■■■■■■");
+
 					}
 					break;
 				case"q":
@@ -163,13 +188,24 @@ public class StoreFinderView {
 					　| |　　) /
 					`ノ )　　Lﾉ 
 					""";
-					System.out.println("종료 되었습니다.\n이용해 주셔서 감사합니다.");
+					System.out.println("■■■■■■■■■■■■■■■■■■■■■");
+					System.out.println("▶  종료 되었습니다.      ◀");
+					System.out.println("▶  이용해 주셔서 감사합니다. ◀");
+					System.out.println("■■■■■■■■■■■■■■■■■■■■■");
 					System.out.println(lastMogi);
 					break loop;
 			}
 			
 		}
 	}
+	
+	/**
+	 * 매장 검색
+	 */
+	public void doStroeSearch() {
+		
+	}
+	
 	/**
 	 * 회원 이전 조회 내역
 	 */
@@ -186,18 +222,16 @@ public class StoreFinderView {
 					while((line = bufferedReader.readLine())!=null) {
 						System.out.println(line);
 					}
-					System.out.println(line);
+					
 				} catch (FileNotFoundException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}else {
-				System.out.printf("┌────────────────────────┐\n");
-				System.out.printf("│이전 이력이 없습니다.           │\n");
-				System.out.printf("└────────────────────────┘\n");
+				System.out.println("■■■■■■■■■■■■■■■■■■■■");
+				System.out.println("▶  이전 이력이 없습니다.  ◀");
+				System.out.println("■■■■■■■■■■■■■■■■■■■■");
 			}
         }
         
@@ -209,8 +243,8 @@ public class StoreFinderView {
 	 */
 	public void doUpdate() {
 		MemberVO inVO=new MemberVO(); //Dao전달 Param
+
 		//회원ID 자동 입력
-		
 		inVO.setMemberId(dao.MEMBER_LOGIN_ID);
 		
 		// 이름
@@ -257,38 +291,28 @@ public class StoreFinderView {
 		//가입일
 		inVO.setRegDt(DateUtil.getCurrentDate("yyyy/MM/dd"));
 		
-		// 권한
-		while(true) {
-			System.out.printf("권한을 입력 하세요.(예:관리자/일반)>");
-			String role = scanner.nextLine().trim();
-			
-			if(role.isEmpty() || role.isBlank()) {
-				System.out.println("※[입력] 권한을 입력 하세요.>\n");
-				continue;
-			}
-			
-			inVO.setRole(role);
-			break;
-		}
+		String role = "일반";
+		inVO.setRole(role);
 		
 		//dao
 		int flag = dao.doUpdate(inVO);
 		
 		if(1==flag) { //성공
-			System.out.printf("┌────────────────────────┐\n");
-			System.out.printf("│[수정:성공] 수정 회원:%s       │\n",inVO.voToCsv());
-			System.out.printf("└────────────────────────┘\n");
-			
+			System.out.printf("■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■\n");
+			System.out.printf("▶[수정완료] 수정을 완료했습니다.                            ◀\n");
+			System.out.printf("▶ %s ◀\n",inVO.voToCsvLog());
+			System.out.printf("■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■\n");
+		
 			//파일 저장
 			dao.writeFile(dao.MEMBER_DATA);
 		}else if(2==flag) {//memberId존재
-			System.out.printf("┌────────────────────────┐\n");
-			System.out.printf("│[X] (%s)회원이 존재 합니다.    │\n",inVO.getMemberId());
-			System.out.printf("└────────────────────────┘\n");
+			System.out.printf("■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■\n");
+			System.out.printf("▶ (%s)회원이 존재 합니다.  ◀\n",inVO.getMemberId());
+			System.out.printf("■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■\n");
 		}else if(0==flag) {//실패
-			System.out.printf("┌────────────────────────┐\n");
-			System.out.printf("│[수정:실패] 회원 정보:%s       │\n",inVO.getMemberId());
-			System.out.printf("└────────────────────────┘\n");
+			System.out.printf("■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■\n");
+			System.out.printf("▶ 수정하지 못했습니다. 관리자에게 문의해주세요            ◀\n");
+			System.out.printf("■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■\n");
 		}
 	}
 	
@@ -316,22 +340,22 @@ public class StoreFinderView {
 			int flag = dao.doDelete(inVO);
 			
 			if(1==flag) {//삭제 성공
-				System.out.printf("┌────────────────────────┐\n");
-				System.out.printf("│[탈퇴:성공] 탈퇴 회원:%s       │\n",inVO.getMemberId());
-				System.out.printf("└────────────────────────┘\n");
+				System.out.printf("■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■\n");
+				System.out.printf("▶ (%s)님 회원 탈퇴 완료 하였습니다.            ◀\n",inVO.getMemberId());
+				System.out.printf("■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■\n");
 				
-				//파일 저장
-				dao.MEMBER_LOGIN_SESSION=false;
-				dao.writeFile(dao.MEMBER_DATA);
+				dao.MEMBER_LOGIN_ID = ""; //로그인 아이디 삭제
+				dao.MEMBER_LOGIN_SESSION=false; //로그인 섹션 변경
+				dao.writeFile(dao.MEMBER_DATA);//파일 저장
 				
 			}else if(2==flag) {//회원ID 없음
-				System.out.printf("┌────────────────────────┐\n");
-				System.out.printf("│[탈퇴:실패] (%s)회원이 존재하지 않습니다  │\n",inVO.getMemberId());
-				System.out.printf("└────────────────────────┘\n");
+				System.out.printf("■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■\n");
+				System.out.printf("▶ (%s)님 아이디가 존재하지 않습니다.           ◀\n",inVO.getMemberId());
+				System.out.printf("■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■\n");
 			}else if(0==flag) {
-				System.out.printf("┌────────────────────────┐\n");
-				System.out.printf("│[탈퇴:실패] 회원 정보:%s       │\n",inVO.getMemberId());
-				System.out.printf("└────────────────────────┘\n");
+				System.out.printf("■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■\n");
+				System.out.printf("▶ 탈퇴실패 못했습니다. 관리자에게 문의해주세요            ◀\n");
+				System.out.printf("■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■\n");
 			}
 		}else {
 			System.out.println("※[입력] 회원아이디가 일치 하지 않습니다.>\n");
@@ -402,41 +426,28 @@ public class StoreFinderView {
 		//가입일
 		inVO.setRegDt(DateUtil.getCurrentDate("yyyy/MM/dd"));
 		
-		// 권한
-		while(true) {
-			System.out.printf("권한을 입력 하세요.(예:관리자/일반)>");
-			String role = scanner.nextLine().trim();
-			
-			if(role.isEmpty() || role.isBlank()) {
-				System.out.println("※[입력] 권한을 입력 하세요.>\n");
-				continue;
-			}
-			
-			inVO.setRole(role);
-			break;
-		}
+		String role = "일반";
+		inVO.setRole(role);
 		
 		//dao
 		int flag = dao.doSave(inVO);
 		if(1==flag) { //성공
-			System.out.printf("┌────────────────────────┐\n");
-			System.out.printf("│[가입:성공] 등록 회원:%s       │\n",inVO.voToCsv());
-			System.out.printf("└────────────────────────┘\n");
-			
+			System.out.printf("■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■\n");
+			System.out.printf("▶ (%s)님 회원 가입 완료 하였습니다.            ◀\n",inVO.getMemberId());
+			System.out.printf("■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■\n");
+	
 			//파일 저장
 			dao.writeFile(dao.MEMBER_DATA);
 		}else if(2==flag) {//memberId존재
-			System.out.printf("┌────────────────────────┐\n");
-			System.out.printf("│[X] (%s)회원이 존재   합니다.  │\n",inVO.getMemberId());
-			System.out.printf("└────────────────────────┘\n");
+			System.out.printf("■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■\n");
+			System.out.printf("▶ (%s) 아이디가 이미 존재 합니다..           ◀\n",inVO.getMemberId());
+			System.out.printf("■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■\n");
+			
 		}else if(0==flag) {//실패
-			System.out.printf("┌────────────────────────┐\n");
-			System.out.printf("│[등록:실패] 회원 정보:%s       │\n",inVO.getMemberId());
-			System.out.printf("└────────────────────────┘\n");
+			System.out.printf("■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■\n");
+			System.out.printf("▶ 회원가입 하지 못했습니다. 관리자에게 문의해주세요        ◀\n");
+			System.out.printf("■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■\n");
 		}
-		
-		//pcwk03,이상무03,a4321,jamesol@paran.com,2025/10/25,일반
-
 	}
 	
 	/**
@@ -475,22 +486,17 @@ public class StoreFinderView {
 
 		MemberVO outVO = dao.doLogin(inVO);
 		
-		
 		if(null == outVO) {
-			System.out.printf("┌────────────────────────┐\n");
-			System.out.printf(" [%s] 회원이 존재하지 않습니다.     \n",inVO.getMemberId());
-			System.out.printf("└────────────────────────┘\n");
-			
+			System.out.printf("■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■\n");
+			System.out.printf("▶ (%s) 회원이 존재하지 않습니다.  ◀\n",inVO.getMemberId());
+			System.out.printf("■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■\n");
 		}else {
-			System.out.printf("┌────────────────────────┐\n");
-			System.out.printf(" [%s]님 로그인 하셨습니다.       \n",inVO.getMemberId());
-			System.out.printf("└────────────────────────┘\n");
-//			System.out.printf("->%s%n",outVO.voToTable());
+			System.out.printf("■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■\n");
+			System.out.printf("▶ (%s)님 로그인 하셨습니다.  ◀\n",inVO.getMemberId());
+			System.out.printf("■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■\n");
 			
-			dao.MEMBER_LOGIN_SESSION=true;
-			dao.MEMBER_LOGIN_ID = memberId;
+			dao.MEMBER_LOGIN_SESSION=true; //섹션 로그인 상태 변경
+			dao.MEMBER_LOGIN_ID = memberId; //회원 아이디 저장
 		}
 	}
-	
-	
 }
