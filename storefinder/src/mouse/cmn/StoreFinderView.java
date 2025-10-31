@@ -41,7 +41,7 @@ public class StoreFinderView {
 		//menu
 		loop:while(true) {
 //			
-			StringBuilder menu = menuStr.menuSet(dao.MEMBER_LOGIN_SESSION, "1");
+			StringBuilder menu = menuStr.menuSet(dao.MEMBER_LOGIN_SESSION, "1", dao.MEMBER_LOGIN_ID);
 			System.out.println(menu);	
 			
 			System.out.print("메뉴를 입력 하세요.>");
@@ -51,7 +51,7 @@ public class StoreFinderView {
 				case "1"://매장 찾기
 					do {
 						String storeType = "";
-						StringBuilder menuSubTitle = menuStr.menuSet(dao.MEMBER_LOGIN_SESSION, "2");
+						StringBuilder menuSubTitle = menuStr.menuSet(dao.MEMBER_LOGIN_SESSION, "2", dao.MEMBER_LOGIN_ID);
 			        	System.out.println(menuSubTitle);
 						
 						System.out.printf("검색하실 메뉴를 선택해 주세요>");
@@ -315,11 +315,10 @@ public class StoreFinderView {
 		
 		//dao
 		int flag = dao.doSave(inVO);
-		if(1==flag) { //성공
+			if(1==flag) { //성공
 			System.out.printf("■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■\n");
 			System.out.printf("▶ (%s)님 회원 가입 완료 하였습니다.            ◀\n",inVO.getMemberId());
 			System.out.printf("■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■\n");
-	
 			//파일 저장
 			dao.writeFile(dao.MEMBER_DATA);
 		}else if(2==flag) {//memberId존재
@@ -506,7 +505,7 @@ public class StoreFinderView {
 					+ "| '--------------' || '--------------' || '--------------' || '--------------' || '--------------' |\r\n"
 					+ " '----------------'  '----------------'  '----------------'  '----------------'  '----------------'";
 		}else if(logNum == 2) {
-			teamLog = "ad88888ba                                                 88888888888  88                        88\r\n"
+			teamLog = " ad88888ba                                                 88888888888  88                        88\r\n"
 					+ "d8\"     \"8b  ,d                                            88           \"\"                        88\r\n"
 					+ "Y8,          88                                            88                                     88\r\n"
 					+ "`Y8aaaaa,  MM88MMM  ,adPPYba,   8b,dPPYba,   ,adPPYba,     88aaaaa      88  8b,dPPYba,    ,adPPYb,88   ,adPPYba,  8b,dPPYba,\r\n"

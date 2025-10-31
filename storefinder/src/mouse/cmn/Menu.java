@@ -21,9 +21,8 @@ public class Menu {
 	}
 
 	//메뉴설정
-	public StringBuilder menuSet(boolean loginSession, String menuType) {
+	public StringBuilder menuSet(boolean loginSession, String menuType, String memberId) {
 		ArrayList<String> getMenuTitle=new ArrayList<>();
-		dao = new MemberDao();
 		if(menuType.equals("1")) {
 			if(loginSession == false) {
 				getMenuTitle.add("│  Store Finder	 	│");
@@ -37,7 +36,7 @@ public class Menu {
 	        }else{
 	        	getMenuTitle.add("│  Store Finder	 	│");
 	        	getMenuTitle.add("├───────────────────────┤");
-	        	getMenuTitle.add("   ▶ "+dao.MEMBER_LOGIN_ID );
+	        	getMenuTitle.add("   ▶ "+memberId+"님" );
 	        	getMenuTitle.add("├───────────────────────┤");
 	        	getMenuTitle.add("│  1. 가까운 매장찾기		│");
 	        	getMenuTitle.add("│  4. 이전 내역보기		│");

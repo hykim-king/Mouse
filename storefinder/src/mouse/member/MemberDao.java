@@ -57,19 +57,12 @@ public class MemberDao implements WorkDiv<MemberVO> {
 	public int writeFile(String filePath) {
 		int count = 0;
 		
-
-		
 		try(BufferedWriter bw = new BufferedWriter(new FileWriter(filePath));){
 			//Value Object To csv
-			//pcwk01,이상무01,a4321,jamesol@paran.com,2025/10/27,일반
-			
 			for(MemberVO vo : members) {
 				count++;
-//				System.out.println(vo.voToCsv());
 				bw.write(vo.voToCsv());
 			}
-			
-			
 		} catch (IOException e) {
 			log.debug("IOException : "+e.getMessage());
 			e.printStackTrace();
@@ -107,7 +100,7 @@ public class MemberDao implements WorkDiv<MemberVO> {
 
 				if(strArr.length == 6) {
 					MemberVO vo=new MemberVO(strArr[0], strArr[1], strArr[2], strArr[3], strArr[4], strArr[5]);
-					log.debug(vo);
+//					log.debug(vo);
 					members.add(vo);
 					flag++;
 				}
