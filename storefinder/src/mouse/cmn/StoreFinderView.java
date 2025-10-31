@@ -129,7 +129,11 @@ public class StoreFinderView {
 					}while(true);
 					
 				case"2": //로그인
-					doLogin();
+					if(dao.MEMBER_LOGIN_SESSION == true) {
+						doKeepOut();
+					}else {
+						doLogin();
+					}
 					break;
 				case"3": //회원가입
 					if(dao.MEMBER_LOGIN_SESSION == true) {
@@ -248,24 +252,54 @@ public class StoreFinderView {
 	 */
 	public void doSave() {
 		MemberVO inVO=new MemberVO(); //Dao전달 Param
+		
+		boolean flag2 = false;
 		//회원ID입력
+		
+		System.out.println("■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■");
+    	System.out.println("▶	숫자 [0]을 누르면 메인으로 이동합니다.	◀");
+    	System.out.println("■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■");
 		while(true) {
 			System.out.printf("회원ID를 입력 하세요.>");
 			String memberId = scanner.nextLine().trim();
+			
+			if(memberId.equals("0")) {
+				flag2 = true;
+				break;
+			}
 			
 			if(memberId.isEmpty() || memberId.isBlank()) {
 				System.out.println("※[입력] 회원ID를 입력 하세요.>\n");
 				continue;
 			}
 			
+			if(memberId.length() < 4) {
+				System.out.println("※[자리수 제한] 4자 이상 입력해주세요>\n");
+				continue;
+			}
+			
+			if(memberId.matches(".*[ㄱ-ㅎㅏ-ㅣ가-힣]+.*")) {
+				//한글이 포함된 문자열
+				System.out.println("※[한글 제한] 한글은 포함될 수 없습니다.>\n");
+				continue;
+			}
+				
 			inVO.setMemberId(memberId);
 			break;
 		}
 		
 		// 이름
 		while(true) {
+			if(flag2 == true) {
+				break;
+			}
 			System.out.printf("이름을 입력 하세요.>");
 			String name = scanner.nextLine().trim();
+			
+			if(name.equals("0")) {
+				flag2 = true;
+				break;
+			}
 			
 			if(name.isEmpty() || name.isBlank()) {
 				System.out.println("※[입력] 이름을 입력 하세요.>\n");
@@ -277,8 +311,16 @@ public class StoreFinderView {
 		}
 		// 비밀번호
 		while(true) {
+			if(flag2 == true) {
+				break;
+			}
 			System.out.printf("비밀번호를 입력 하세요.>");
 			String password = scanner.nextLine().trim();
+			
+			if(password.equals("0")) {
+				flag2 = true;
+				break;
+			}
 			
 			if(password.isEmpty() || password.isBlank()) {
 				System.out.println("※[입력] 비밀번호를 입력 하세요.>\n");
@@ -291,8 +333,17 @@ public class StoreFinderView {
 		
 		// 이메일
 		while(true) {
+			if(flag2 == true) {
+				break;
+			}
+			
 			System.out.printf("이메일을 입력 하세요.>");
 			String email = scanner.nextLine().trim();
+			
+			if(email.equals("0")) {
+				flag2 = true;
+				break;
+			}
 			
 			if(email.isEmpty() || email.isBlank()) {
 				System.out.println("※[입력] 이메일을 입력 하세요.>\n");
@@ -309,23 +360,26 @@ public class StoreFinderView {
 		String role = "일반";
 		inVO.setRole(role);
 		
-		//dao
-		int flag = dao.doSave(inVO);
-			if(1==flag) { //성공
-			System.out.printf("■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■\n");
-			System.out.printf("▶ (%s)님 회원 가입 완료 하였습니다.            ◀\n",inVO.getMemberId());
-			System.out.printf("■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■\n");
-			//파일 저장
-			dao.writeFile(dao.MEMBER_DATA);
-		}else if(2==flag) {//memberId존재
-			System.out.printf("■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■\n");
-			System.out.printf("▶ (%s) 아이디가 이미 존재 합니다..           ◀\n",inVO.getMemberId());
-			System.out.printf("■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■\n");
+		if(flag2 == false) {
+			//dao
+			int flag = dao.doSave(inVO);
 			
-		}else if(0==flag) {//실패
-			System.out.printf("■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■\n");
-			System.out.printf("▶ 회원가입 하지 못했습니다. 관리자에게 문의해주세요        ◀\n");
-			System.out.printf("■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■\n");
+			if(1==flag) { //성공
+				System.out.printf("■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■\n");
+				System.out.printf("▶ (%s)님 회원 가입 완료 하였습니다.            ◀\n",inVO.getMemberId());
+				System.out.printf("■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■\n");
+				//파일 저장
+				dao.writeFile(dao.MEMBER_DATA);
+			}else if(2==flag) {//memberId존재
+				System.out.printf("■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■\n");
+				System.out.printf("▶ (%s) 아이디가 이미 존재 합니다..           ◀\n",inVO.getMemberId());
+				System.out.printf("■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■\n");
+				
+			}else if(0==flag) {//실패
+				System.out.printf("■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■\n");
+				System.out.printf("▶ 회원가입 하지 못했습니다. 관리자에게 문의해주세요        ◀\n");
+				System.out.printf("■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■\n");
+			}
 		}
 	}
 	/**
@@ -368,11 +422,21 @@ public class StoreFinderView {
 
 		//회원ID 자동 입력
 		inVO.setMemberId(dao.MEMBER_LOGIN_ID);
+		boolean flag2 = false;
+		
+		System.out.println("■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■");
+    	System.out.println("▶	숫자 [0]을 누르면 메인으로 이동합니다.	◀");
+    	System.out.println("■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■");
 		
 		// 이름
 		while(true) {
 			System.out.printf("이름을 입력 하세요.>");
 			String name = scanner.nextLine().trim();
+			
+			if(name.equals("0")) {
+				flag2 = true;
+				break;
+			}
 			
 			if(name.isEmpty() || name.isBlank()) {
 				System.out.println("※[입력] 이름을 입력 하세요.>\n");
@@ -384,9 +448,15 @@ public class StoreFinderView {
 		}
 		// 비밀번호
 		while(true) {
+			if(flag2 == true) {
+				break;
+			}
 			System.out.printf("비밀번호를 입력 하세요.>");
 			String password = scanner.nextLine().trim();
-			
+			if(password.equals("0")) {
+				flag2 = true;
+				break;
+			}
 			if(password.isEmpty() || password.isBlank()) {
 				System.out.println("※[입력] 비밀번호를 입력 하세요.>\n");
 				continue;
@@ -398,9 +468,15 @@ public class StoreFinderView {
 		
 		// 이메일
 		while(true) {
+			if(flag2 == true) {
+				break;
+			}
 			System.out.printf("이메일을 입력 하세요.>");
 			String email = scanner.nextLine().trim();
-			
+			if(email.equals("0")) {
+				flag2 = true;
+				break;
+			}
 			if(email.isEmpty() || email.isBlank()) {
 				System.out.println("※[입력] 이메일을 입력 하세요.>\n");
 				continue;
