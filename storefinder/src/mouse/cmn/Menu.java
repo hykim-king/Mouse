@@ -36,7 +36,7 @@ public class Menu {
 	        }else{
 	        	getMenuTitle.add("│  Store Finder	 	│");
 	        	getMenuTitle.add("├───────────────────────┤");
-	        	getMenuTitle.add("   ▶ "+memberId+"님" );
+	        	getMenuTitle.add("   ▶ "+memberId+"님 환영합니다." );
 	        	getMenuTitle.add("├───────────────────────┤");
 	        	getMenuTitle.add("│  1. 가까운 매장찾기		│");
 	        	getMenuTitle.add("│  4. 이전 내역보기		│");

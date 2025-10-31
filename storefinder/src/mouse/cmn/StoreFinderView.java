@@ -23,8 +23,6 @@ public class StoreFinderView {
 	private MemberDao dao;
 	private Scanner scanner;
 	
-	
-	
 	public StoreFinderView(Scanner scanner) throws IOException {
 		super();
 		this.scanner = scanner;
@@ -134,15 +132,18 @@ public class StoreFinderView {
 					doLogin();
 					break;
 				case"3": //회원가입
-					doSave();
+					if(dao.MEMBER_LOGIN_SESSION == true) {
+						doKeepOut();
+					}else {
+						doSave();
+					}
+				
 					break;
 				case"4": //이전 내역보기
 					if(dao.MEMBER_LOGIN_SESSION == true) {
 						doUserHistory();
 					}else {
-						System.out.println("■■■■■■■■■■■■■■■■■■");
-						System.out.println("▶  잘못된 접근입니다.  ◀");
-						System.out.println("■■■■■■■■■■■■■■■■■■");
+						doKeepOut();
 					}
 					
 					break;
@@ -150,28 +151,21 @@ public class StoreFinderView {
 					if(dao.MEMBER_LOGIN_SESSION == true) {
 						doUpdate();
 					}else {
-						System.out.println("■■■■■■■■■■■■■■■■■■");
-						System.out.println("▶  잘못된 접근입니다.  ◀");
-						System.out.println("■■■■■■■■■■■■■■■■■■");
+						doKeepOut();
 					}
 					break;					
 				case"6": //회원탈퇴
 					if(dao.MEMBER_LOGIN_SESSION == true) {
 						doDelete();
 					}else {
-						System.out.println("■■■■■■■■■■■■■■■■■■");
-						System.out.println("▶  잘못된 접근입니다.  ◀");
-						System.out.println("■■■■■■■■■■■■■■■■■■");
+						doKeepOut();
 					}
 					break;
 				case"7": //로그아웃
 					if(dao.MEMBER_LOGIN_SESSION == true) {
 						dao.MEMBER_LOGIN_SESSION = false;
 					}else {
-						System.out.println("■■■■■■■■■■■■■■■■■■");
-						System.out.println("▶  잘못된 접근입니다.  ◀");
-						System.out.println("■■■■■■■■■■■■■■■■■■");
-
+						doKeepOut();
 					}
 					break;
 				case"q": //종료
@@ -184,16 +178,18 @@ public class StoreFinderView {
 					System.out.println("■■■■■■■■■■■■■■■■■■■■■■■■■");
 //					System.out.println(lastMogi);
 					break loop;
+				default:
+					doKeepOut();
+					break;
 			}
 			
 		}
 	}
 	
-	/**
-	 * 1. 매장 검색
-	 */
-	public void doStroeSearch() {
-		
+	public void doKeepOut() {
+		System.out.println("■■■■■■■■■■■■■■■■■■■■■■■■■");
+		System.out.println("▶	잘못된 접근입니다.	◀");
+		System.out.println("■■■■■■■■■■■■■■■■■■■■■■■■■");
 	}
 	
 	/**
